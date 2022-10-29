@@ -1,5 +1,8 @@
-const getCows = (req, res) => {
-  res.send('Get All Cows');
+const pool = require('../db.js');
+
+const getCows = async (req, res) => {
+  const [rows] = await pool.query('SELECT 1 + 1 AS RESULT');
+  res.json({ rows });
 };
 
 const createCow = (req, res) => {
