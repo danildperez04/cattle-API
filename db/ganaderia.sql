@@ -19,7 +19,7 @@ CREATE TABLE breed(
 CREATE TABLE cow(
     id_cow INT(12) NOT NULL AUTO_INCREMENT,
     cow_name VARCHAR(30),
-    cow_desc TEXT,
+    cow_desc TEXT DEFAULT 'LECHERA',
     alive BOOLEAN,
     heat BOOLEAN,
     gender VARCHAR(10) DEFAULT 'MACHO',
@@ -27,8 +27,8 @@ CREATE TABLE cow(
         gender = 'MACHO'
         OR gender = 'HEMBRA'
     ),
-    cow_shoes BOOLEAN,
-    dehorned BOOLEAN,
+    cow_shoes BOOLEAN DEFAULT FALSE,
+    dehorned BOOLEAN DEFAULT FALSE,
     periodic_weight DOUBLE,
     periodic_height DOUBLE,
     clinic_history TEXT,
@@ -36,8 +36,10 @@ CREATE TABLE cow(
     PRIMARY KEY (id_cow)
 );
 CREATE TABLE breedcow(
+    id INT(12) AUTO_INCREMENT,
     id_breed INT(12),
     id_cow INT(12),
+    PRIMARY KEY (id),
     FOREIGN KEY (id_breed) REFERENCES breed(id_breed),
     FOREIGN KEY (id_cow) REFERENCES cow(id_cow)
 );
@@ -56,6 +58,14 @@ CREATE TABLE cowbirth(
     FOREIGN KEY (id_father) REFERENCES cow(id_cow),
     FOREIGN KEY (id_mother) REFERENCES cow(id_cow)
 );
+CREATE TABLE deadcow(
+id_death INT NOT NULL AUTO_INCREMENT,
+id_cow INT,
+death_cause TEXT,
+death_date DATE NOT NULL,
+PRIMARY KEY (id_death),
+FOREIGN KEY (id_cow) REFERENCES cow (id_cow)
+);
 -- Vaccines 
 CREATE TABLE vaccine(
     id_vaccine INT(12) NOT NULL AUTO_INCREMENT,
@@ -64,17 +74,19 @@ CREATE TABLE vaccine(
     PRIMARY KEY (id_vaccine)
 );
 CREATE TABLE inventory(
-    id INT(12) NOT NULL auto_increment,
+    id INT(12) NOT NULL AUTO_INCREMENT,
     id_vaccine INT(12),
     amount INT(8) DEFAULT 0,
     PRIMARY KEY (id),
     FOREIGN KEY(id_vaccine) REFERENCES vaccine(id_vaccine)
 );
 CREATE TABLE cowvaccine(
+    id INT(12) NOT NULL AUTO_INCREMENT,
     id_cow INT(12) NOT NULL,
     id_vaccine INT(12) NOT NULL,
     vaccine_date DATE NOT NULL,
     grams DOUBLE(4, 4) NOT NULL,
+    PRIMARY KEY (id),
     FOREIGN KEY (id_cow) REFERENCES cow(id_cow),
     FOREIGN KEY (id_vaccine) REFERENCES vaccine(id_vaccine)
 );
@@ -102,12 +114,14 @@ CREATE TABLE operation(
 CREATE TABLE lot(
     id_lot INT(12) NOT NULL AUTO_INCREMENT,
     lot_address VARCHAR(80),
-    cow_amount INT(8),
+    cow_amount INT(8) DEFAULT 0,
     PRIMARY KEY (id_lot)
 );
 CREATE TABLE lotcow(
+    id INT(12) NOT NULL AUTO_INCREMENT,
     id_lot INT(12),
     id_cow INT(12),
+    PRIMARY KEY(id),
     FOREIGN KEY (id_lot) REFERENCES lot(id_lot),
     FOREIGN KEY (id_cow) REFERENCES cow(id_cow)
 );

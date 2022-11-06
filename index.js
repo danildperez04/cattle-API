@@ -1,12 +1,12 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config({});
+const { host, port } = require('./config');
 const morgan = require('morgan');
 const router = require('./routes');
 const notFound = require('./middlewares/notFound');
 const errorLogger = require('./middlewares/errorLogger');
 
-const PORT = process.env.PORT || 3000;
 const app = express();
 
 //Statics
@@ -24,6 +24,6 @@ app.use(notFound);
 //Errors
 app.use(errorLogger);
 
-app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
+app.listen(port, host, () => {
+  console.log(`Server running on ${port}`);
 });
