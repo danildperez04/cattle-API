@@ -18,21 +18,19 @@ CREATE TABLE breed(
 );
 CREATE TABLE cow(
     id_cow INT(12) NOT NULL AUTO_INCREMENT,
-    cow_name VARCHAR(30),
+    cow_name VARCHAR(30) NOT NULL,
     cow_desc VARCHAR(10) NOT NULL DEFAULT 'LECHERA',
-    alive BOOLEAN DEFAULT 1,
-    heat BOOLEAN DEFAULT 0,
+    alive BOOLEAN NOT NULL DEFAULT 1,
+    heat DATE,
     gender VARCHAR(10) NOT NULL DEFAULT 'MACHO',
     CHECK (
         gender = 'MACHO'
         OR gender = 'HEMBRA'
     ),
-    cow_shoes BOOLEAN NOT NULL DEFAULT FALSE,
-    dehorned BOOLEAN NOT NULL DEFAULT FALSE,
+    cow_shoes DATE,
+    dehorned DATE,
     periodic_weight DOUBLE NOT NULL,
     periodic_height DOUBLE NOT NULL,
-    clinic_history TEXT,
-    medic_history TEXT,
     birth_date DATE NOT NULL,
     PRIMARY KEY (id_cow)
 );
@@ -42,15 +40,6 @@ CREATE TABLE breedcow(
     id_cow INT(12),
     PRIMARY KEY (id),
     FOREIGN KEY (id_breed) REFERENCES breed(id_breed),
-    FOREIGN KEY (id_cow) REFERENCES cow(id_cow)
-);
-CREATE TABLE cowbirth(
-    id_cowbirth INT(12) NOT NULL,
-    id_cow INT(12),
-    monta_date DATE NOT NULL,
-    birth_date DATE NOT NULL,
-    weight DOUBLE(4, 4) NOT NULL,
-    PRIMARY KEY (id_cowbirth),
     FOREIGN KEY (id_cow) REFERENCES cow(id_cow)
 );
 CREATE TABLE deadcow(
@@ -84,6 +73,17 @@ CREATE TABLE cowvaccine(
     PRIMARY KEY (id),
     FOREIGN KEY (id_cow) REFERENCES cow(id_cow),
     FOREIGN KEY (id_vaccine) REFERENCES vaccine(id_vaccine)
+);
+CREATE TABLE clinichistory(
+    id INT AUTO_INCREMENT,
+    id_cow INT NOT NULL,
+    id_cowvaccine INT,
+    description TEXT,
+    date DATE NOT NULL,
+    img_url TEXT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(id_cow) REFERENCES cow (id_cow)
+    FOREIGN KEY(id_cow) REFERENCES cowvaccine (id)
 );
 -- Operations
 CREATE TABLE thirdpeople(
