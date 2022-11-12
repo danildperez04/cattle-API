@@ -5,12 +5,9 @@ BEGIN
 END$$
 DELIMITER ;
 
-DELIMITER ;;
-CREATE PROCEDURE CREATE_COW(IN cow_name varchar(30), IN cow_desc TEXT, IN alive BOOLEAN, IN heat BOOLEAN, IN gender VARCHAR(10), IN cow_shoes BOOLEAN, IN dehorned BOOLEAN, IN periodic_weight DOUBLE, IN periodic_height DOUBLE, IN clinic_history TEXT, IN medic_history TEXT, IN birth_date DATE)
+CREATE PROCEDURE CREATE_COW(IN cow_name varchar(30), IN cow_desc varchar(10), IN alive BOOLEAN, IN heat DATE, IN gender VARCHAR(10), IN cow_shoes DATE, IN dehorned DATE, IN birth_date DATE)
 BEGIN
-
-INSERT INTO cow VALUES(null, normalizeText( cow_name), normalizeText(cow_desc), alive, heat, gender, cow_shoes, dehorned, periodic_weight, periodic_height, clinic_history, medic_history, birth_date); -- TODO: FINISH this
-
+INSERT INTO cow VALUES(null, normalizeText(cow_name), normalizeText(cow_desc), alive, heat, normalizeText(gender), cow_shoes, dehorned, birth_date); -- TODO: FINISH this
 END;;
 DELIMITER ;
 
