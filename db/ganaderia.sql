@@ -6,14 +6,14 @@ CREATE TABLE user (
     username VARCHAR(16) NOT NULL,
     email VARCHAR(60) NOT NULL UNIQUE,
     fullname VARCHAR(100) NOT NULL,
-    password VARCHAR(60) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     birth_date DATE NOT NULL,
     PRIMARY KEY (id_user)
 );
 -- Cows
 CREATE TABLE breed(
     id_breed INT NOT NULL AUTO_INCREMENT,
-    breed_name VARCHAR(16) NOT NULL,
+    breed_name VARCHAR(16) NOT NULL UNIQUE,
     PRIMARY KEY (id_breed)
 );
 CREATE TABLE cow(
@@ -76,9 +76,9 @@ CREATE TABLE clinichistory(
     id INT AUTO_INCREMENT,
     id_cow INT NOT NULL,
     id_cowvaccine INT,
+    description TEXT,
     periodic_weight DOUBLE NOT NULL,
     periodic_height DOUBLE NOT NULL,
-    description TEXT,
     date DATE NOT NULL,
     img_url TEXT,
     PRIMARY KEY(id),
