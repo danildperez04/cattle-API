@@ -1,0 +1,76 @@
+--VACCINES
+
+--FUNCTION FOR VALIDATE IF THERE IS A VACCINE
+DROP FUNCTION IF EXISTS VACCINE_EXISTS;
+DELIMITER $$
+CREATE FUNCTION VACCINE_EXISTS(id_vaccine INT) RETURNS BOOLEAN DETERMINISTIC
+BEGIN
+    DECLARE id INT;
+    SELECT v.id_vaccine FROM vaccine v WHERE v.id_vaccine = id_vaccine INTO id;
+    IF id IS NULL THEN
+		RETURN FALSE;
+    END IF;
+	RETURN TRUE;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS GET_VACCINES;
+DELIMITER ;;
+CREATE PROCEDURE GET_VACCINES()
+BEGIN
+    SELECT * FROM vaccine;
+END ;;
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS GET_VACCINE;
+DELIMITER ;;
+CREATE PROCEDURE GET_VACCINE( IN id INT)
+BEGIN
+    SELECT * FROM vaccine WHERE id_vaccine = id;
+END;;
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS CREATE_VACCINE;
+DELIMITER ;;
+CREATE PROCEDURE CREATE_VACCINE(IN vaccine_name VARCHAR(16), IN vaccine_desc TEXT)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SELECT "HA OCURRIDO UN ERROR" AS MESSAGE;
+        ROLLBACK;
+    END;
+    START TRANSACTION;
+    BEGIN
+        IF VACCINE_EXISTS(id_vaccine) THEN 
+            SET @message = CONCAT('Ya existe registro para la vacuna con id ', id); 
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @message;
+        END IF;    
+        INSERT INTO vaccine VALUES(null, normalizeText(vaccine_name), normalizeText(vaccine_desc));
+        COMMIT;
+    END;
+END;;
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS UPDATE_VACCINE;
+DELIMITER ;;
+CREATE PROCEDURE UPDATE_VACCINE(IN id_vaccine INT, IN vaccine_name VARCHAR(16), IN vaccine_desc TEXT)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1 @P1 = RETURNED_SQLSTATE, @P2 = MESSAGE_TEXT;
+        SELECT @P2 AS MESSAGE;
+        ROLLBACK;
+    END;
+    START TRANSACTION;  
+    BEGIN
+        IF NOT VACCINE_EXISTS(id_vaccine) THEN 
+            SET @message = CONCAT('No hay registro de la vacuna con id ', id); 
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @message;
+        END IF;
+        UPDATE vaccine V SET V.vaccine_name = NORMALIZE_TEXT(vaccine_name), v.vaccine_desc = NORMALIZE_TEXT(vaccine_desc) WHERE v.id_vaccine = id_vaccine;
+
+        COMMIT;
+    END;
+END ;;
+DELIMITER ;
+--vacine inventory cow-vaccine medic-history
