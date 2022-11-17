@@ -9,10 +9,14 @@ FROM cow
 WHERE alive = 1;
 
 -- BREED
+CREATE VIEW breed_view AS
+SELECT * 
+FROM breed;
+
 CREATE VIEW breedcow_view AS
 SELECT bc.id, c.cow_name, b.breed_name
 FROM cow c, breedcow bc, breed b
-WHERE bc.id_cow = c.id_cow  AND bc.id_breed = b.id_breed;
+WHERE bc.id_cow = c.id_cow  AND bc.id_breed = b.id_breed ORDER BY c.cow_name;
 
 CREATE VIEW cow_left_view AS
 SELECT c.id_cow, c.cow_name, b.id_breed
