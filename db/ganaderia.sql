@@ -67,7 +67,7 @@ CREATE TABLE cowvaccine(
     id_cow INT NOT NULL,
     id_vaccine INT NOT NULL,
     vaccine_date DATE NOT NULL,
-    ml DOUBLE(4, 4) NOT NULL,
+    ml DOUBLE NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_cow) REFERENCES cow(id_cow),
     FOREIGN KEY (id_vaccine) REFERENCES vaccine(id_vaccine)
@@ -82,7 +82,7 @@ CREATE TABLE clinichistory(
     date DATE NOT NULL,
     img_url TEXT,
     PRIMARY KEY(id),
-    FOREIGN KEY(id_cow) REFERENCES cow (id_cow)
+    FOREIGN KEY(id_cow) REFERENCES cow (id_cow),
     FOREIGN KEY(id_cow) REFERENCES cowvaccine (id)
 );
 -- Operations
@@ -109,7 +109,7 @@ CREATE TABLE operation(
 CREATE TABLE lot(
     id_lot INT NOT NULL AUTO_INCREMENT,
     lot_address VARCHAR(80) NOT NULL,
-    cow_amount INT(8) DEFAULT 0,
+    cow_amount INT DEFAULT 0,
     PRIMARY KEY (id_lot)
 );
 CREATE TABLE lotcow(
