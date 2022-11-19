@@ -42,7 +42,7 @@ CREATE TABLE breedcow(
 );
 CREATE TABLE deadcow(
     id_death INT NOT NULL AUTO_INCREMENT,
-    id_cow INT,
+    id_cow INT UNIQUE,
     death_cause TEXT,
     death_date DATE NOT NULL,
     PRIMARY KEY (id_death),
@@ -57,7 +57,7 @@ CREATE TABLE vaccine(
 );
 CREATE TABLE inventory(
     id INT NOT NULL AUTO_INCREMENT,
-    id_vaccine INT,
+    id_vaccine INT NOT NULL UNIQUE,
     ml DOUBLE DEFAULT 0,
     PRIMARY KEY (id),
     FOREIGN KEY(id_vaccine) REFERENCES vaccine(id_vaccine)

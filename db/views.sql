@@ -10,11 +10,17 @@ SELECT *
 FROM cow
 WHERE alive = 1;
 
+DROP VIEW IF EXISTS male_cow;
+CREATE VIEW male_cow AS
+SELECT *
+FROM cow
+WHERE gender = 'MALE';
+
 -- BREED
 DROP VIEW IF EXISTS breed_view;
 CREATE VIEW breed_view AS
 SELECT * 
-FROM breed;
+FROM breed ORDER BY id_breed;
 
 DROP VIEW IF EXISTS breedcow_view;
 CREATE VIEW breedcow_view AS
@@ -44,7 +50,7 @@ WHERE b.id_cow = a.id_cow AND b.id_third = c.id_third;
 -- VACCINE
 DROP VIEW IF EXISTS inventory_view;
 CREATE VIEW inventory_view AS
-SELECT i.id, v.id_vaccine, v.vaccine_name, v.vaccine_desc, i.amount
+SELECT i.id, v.id_vaccine, v.vaccine_name, v.vaccine_desc, i.ml
 FROM inventory i 
 INNER JOIN vaccine v ON i.id_vaccine = v.id_vaccine;
 
