@@ -21,7 +21,7 @@ DELIMITER ;
 
 DROP FUNCTION IF EXISTS COW_ISALIVE;
 DELIMITER $$
-CREATE FUNCTION COW_ISALIVE(id_cow INT) RETURNS BOOLEAN DETERMINISTIC -- RETORNA VERDADERO EN CASO DE QUE LA VACA EXISTA
+CREATE FUNCTION COW_ISALIVE(id_cow INT) RETURNS BOOLEAN DETERMINISTIC -- RETORNA VERDADERO EN CASO DE QUE LA VACA ESTA VIVA
 BEGIN
 	DECLARE alive INT;
 	SELECT c.alive FROM cow_view c WHERE c.id_cow = id_cow INTO alive;
@@ -76,7 +76,8 @@ BEGIN
 END;;
 DELIMTER ;
 
--- COWS
+-- COWS ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DROP PROCEDURE IF EXISTS GET_COWS; -- OBTIENE TODAS LAS VACAS DE LA TABLA
 DELIMITER ;; 
 CREATE PROCEDURE GET_COWS()
@@ -174,7 +175,8 @@ BEGIN
 END;;
 DELIMITER ;
 
--- BREED
+-- BREED -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DROP PROCEDURE IF EXISTS GET_BREEDS; -- OBTIENE TODAS LAS RAZAS
 DELIMITER ;; 
 CREATE PROCEDURE GET_BREEDS()
@@ -267,7 +269,8 @@ BEGIN
 END;;
 DELIMITER ;
 
--- BREEDCOW
+-- BREEDCOW --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DROP PROCEDURE IF EXISTS GET_BREEDCOW; -- OBTIENE TODAS LAS VACAS CON RAZA
 DELIMITER ;; 
 CREATE PROCEDURE GET_BREEDCOW()
@@ -371,9 +374,9 @@ BEGIN
 END;;
 DELIMITER ;
 
--- DEADCOW
+-- DEADCOW ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-DROP PROCEDURE IF EXISTS GET_DEADCOWS; -- OBTENER EL REGISTRO DE UNA VACA MUERTA
+DROP PROCEDURE IF EXISTS GET_DEADCOWS; -- OBTIENE TODAS LAS VACAS MUERTAS
 DELIMITER ;; 
 CREATE PROCEDURE GET_DEADCOWS()
 BEGIN
@@ -391,7 +394,7 @@ BEGIN
 END;;
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS GET_DEADCOW; -- OBTIENE TODOS LOS REGISTROS DE UNA VACA MUERTA
+DROP PROCEDURE IF EXISTS GET_DEADCOW; -- OBTIENE EL REGISTRO DE UNA VACA MUERTA
 DELIMITER ;; 
 CREATE PROCEDURE GET_DEADCOW(IN id_death INT) -- CAMBIO ACA PORQUE PENSANDOLO BIEN ES UN SIMPLE GET, NO TENDRIA QUE COMPLICARSE TANTO PARA CONSEGUIR UNA RESPUESTA, ADEMAS ESTAMOS HACIENDO LAS CONSULTAS CON LA PROPIA PRIMARY KEY DE LA TABLA
 BEGIN
