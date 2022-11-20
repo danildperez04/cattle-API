@@ -28,8 +28,7 @@ SELECT *
 FROM cow
 WHERE gender = 'HEMBRA';
 
--- BREED -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-- BREED
 DROP VIEW IF EXISTS breed_view;
 CREATE VIEW breed_view AS
 SELECT * 
@@ -37,12 +36,12 @@ FROM breed ORDER BY id_breed;
 
 DROP VIEW IF EXISTS breedcow_view;
 CREATE VIEW breedcow_view AS
-SELECT bc.id, b.breed_name
+SELECT bc.id, bc.id_cow, b.breed_name
 FROM cow c, breedcow bc, breed b
 WHERE bc.id_cow = c.id_cow  AND bc.id_breed = b.id_breed;
 
-DROP VIEW IF EXISTS descrptive_breedcow_view;
-CREATE VIEW descrptive_breedcow_view AS
+DROP VIEW IF EXISTS descriptive_breedcow_view;
+CREATE VIEW descriptive_breedcow_view AS
 SELECT bc.id, c.cow_name, b.breed_name
 FROM cow c, breedcow bc, breed b
 WHERE bc.id_cow = c.id_cow  AND bc.id_breed = b.id_breed ORDER BY c.cow_name;
@@ -59,16 +58,14 @@ SELECT b.id_breed, b.breed_name, bc.id_cow
 FROM breed b
 LEFT JOIN breedcow bc ON b.id_breed = bc.id_breed;
 
--- OPERATION -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-- OPERATION 
 DROP VIEW IF EXISTS operation_view;
 CREATE VIEW operation_view AS
 SELECT b.id_operation, c.fullname, b.operation, a.cow_name  
 FROM cow a, operation b, thirdpeople c
 WHERE b.id_cow = a.id_cow AND b.id_third = c.id_third;
 
--- VACCINE ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-- VACCINE
 DROP VIEW IF EXISTS inventory_view;
 CREATE VIEW inventory_view AS
 SELECT i.id, v.id_vaccine, v.vaccine_name, v.vaccine_desc, i.ml
@@ -80,8 +77,7 @@ CREATE VIEW vaccine_cow_view AS
 SELECT v.id_vaccine, v.vaccine_name, c.cow_name from vaccine v 
 INNER JOIN 	cow c ON c.id_cow = c.id_cow;
 
--- LOT -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-- LOT
 DROP VIEW IF EXISTS lotcow_view;
 CREATE VIEW lotcow_view AS 
 SELECT lc.id_cow, lc.id_lot, c.cow_name, c.cow_desc, l.lot_address
@@ -100,8 +96,7 @@ SELECT lc.id_cow,lc.id_lot, lc.cow_name, lc.cow_desc, bc.breed_name, lc.lot_addr
 FROM lotcow_view lc
 INNER JOIN breedcow_view bc ON lc.id_cow = bc.id_cow;
 
--- DEADCOW ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-- DEADCOW
 DROP VIEW IF EXISTS deadcow_view;
 CREATE VIEW deadcow_view AS
 SELECT *
