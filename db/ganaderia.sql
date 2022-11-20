@@ -1,3 +1,4 @@
+-- SQLBook: Code
 CREATE DATABASE IF NOT EXISTS ganaderia;
 USE ganaderia;
 -- Platform
@@ -83,7 +84,7 @@ CREATE TABLE clinichistory(
     img_url TEXT,
     PRIMARY KEY(id),
     FOREIGN KEY(id_cow) REFERENCES cow (id_cow),
-    FOREIGN KEY(id_cow) REFERENCES cowvaccine (id)
+    FOREIGN KEY(id_cowvaccine) REFERENCES cowvaccine (id)
 );
 -- Operations
 CREATE TABLE thirdpeople(
