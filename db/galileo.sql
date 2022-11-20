@@ -1,4 +1,7 @@
 --FUNCTIONS FOR VACCINE
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 DROP FUNCTION IF EXISTS VACCINE_EXISTS_NAME; -- VALIDA EL NOMBRE DE LA VACUNA EN VACCINE
 DELIMITER $$
@@ -25,7 +28,11 @@ BEGIN
 	RETURN TRUE;
 END $$
 DELIMITER ;
+
 -- FUNCTONS FOR INVENTORY
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DROP FUNCTION IF EXISTS INVENTORY_EXISTS_VACCINE; --VALIDA EL ID DE LA VACUNA EN EL INVANTRIO
 DELIMITER $$
 CREATE FUNCTION INVENTORY_EXISTS_VACCINE(id_vaccine INT) RETURNS BOOLEAN DETERMINISTIC
@@ -51,7 +58,11 @@ BEGIN
 	RETURN TRUE;
 END $$
 DELIMITER ;
+
 --FUNCTIONS FOR COWVACCINE
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DROP FUNCTION IF EXISTS VALIDATE_ML; -- VALIDA SI LA CANTIDAD DE ML EN INVENTARIO ES SUFICIENTE
 DELIMITER $$
 CREATE FUNCTION VALIDATE_ML(id_vaccine INT, ml_cowvaccine DOUBLE) RETURNS BOOLEAN DETERMINISTIC
@@ -77,7 +88,11 @@ BEGIN
 	RETURN TRUE;
 END $$
 DELIMITER ;
+
 -- FUNCTIONS FOR CLINICHISTORY
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DROP FUNCTION IF EXISTS CLINICHISTORY_EXISTS_ID; -- VALIDA SI EXISTE REGISTRO DEL ID DE CLINICHISTORY
 DELIMITER $$
 CREATE FUNCTION CLINICHISTORY_EXISTS_ID(id_clinichistory INT) RETURNS BOOLEAN DETERMINISTIC
@@ -90,7 +105,11 @@ BEGIN
 	RETURN TRUE;
 END $$
 DELIMITER ;
+
 --VACCINES
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DROP PROCEDURE IF EXISTS GET_VACCINES; -- OBTIENE TODAS LAS VACUNAS DE LA TABLA
 DELIMITER ;;
 CREATE PROCEDURE GET_VACCINES()
@@ -101,9 +120,24 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS GET_VACCINE; -- OBTIENE UNA VACUNA ESPECIFICADA
 DELIMITER ;;
+
 CREATE PROCEDURE GET_VACCINE( IN id_vaccine INT)
 BEGIN
-    SELECT * FROM vaccine v WHERE v.id_vaccine = id_vaccine;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1 @p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+        SELECT @p2 AS MESSAGE;
+        ROLLBACK;
+    END;
+    START TRANSACTION;
+    BEGIN
+        IF NOT VACCINE_EXISTS_ID(id_vaccine) THEN -- COMPROBACION DE QUE LA VACA EXISTE
+		    SET @message = CONCAT('NO EXISTE REGISTRO PARA ', id_vaccine);
+    		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @message;
+		END IF;
+        SELECT * FROM vaccine v WHERE v.id_vaccine = id_vaccine;
+        COMMIT;
+    END;
 END;;
 DELIMITER ;
 
@@ -174,6 +208,9 @@ END;;
 DELIMITER ;
 
 -- INVENTORY
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DROP PROCEDURE IF EXISTS GET_INVENTORYS; --OBTIENE TIDOS LOS REGISTROS DEL INVENTARIO
 DELIMITER ;;
 CREATE PROCEDURE GET_INVENTORYS()
@@ -186,7 +223,21 @@ DROP PROCEDURE IF EXISTS GET_INVENTORY; -- OBTIENE UN REGISTRO ESPECIFICO DEL IN
 DELIMITER ;;
 CREATE PROCEDURE GET_INVENTORY( IN id INT)
 BEGIN
-    SELECT * FROM inventory i WHERE i.id = id;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN
+            GET DIAGNOSTICS CONDITION 1 @p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+            SELECT @p2 AS MESSAGE;
+            ROLLBACK;
+        END;
+    START TRANSACTION;
+    BEGIN
+        IF NOT INVENTORY_EXISTS_ID(id) THEN -- COMPROBACION DE QUE LA VACA EXISTE
+		    SET @message = CONCAT('NO EXISTE REGISTRO PARA ', id);
+    	    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @message;
+		END IF;
+        SELECT * FROM inventory i WHERE i.id = id;
+        COMMIT;
+    END;    
 END;;
 DELIMITER ;
 
@@ -258,7 +309,11 @@ BEGIN
     END;
 END;;
 DELIMITER ;
+
 --COWVACCINE
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DROP PROCEDURE IF EXISTS GET_COWVACCINES; --OBTIENE TODOS LOS REGISTROS DEL COWVACCINE
 DELIMITER ;;
 CREATE PROCEDURE GET_COWVACCINES()
@@ -271,7 +326,21 @@ DROP PROCEDURE IF EXISTS GET_COWVACCINE; -- OBTIENE UN REGISTRO ESPECIFICO DE CO
 DELIMITER ;;
 CREATE PROCEDURE GET_COWVACCINE( IN id INT)
 BEGIN
-    SELECT * FROM cowvaccine c WHERE c.id = id;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN
+            GET DIAGNOSTICS CONDITION 1 @p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+            SELECT @p2 AS MESSAGE;
+            ROLLBACK;
+        END;
+    START TRANSACTION;
+    BEGIN
+        IF NOT COWVACCINE_EXISTS_ID(id) THEN -- COMPROBACION DE QUE EXISTA REGISTRO DE COWVACCINE
+		    SET @message = CONCAT('NO EXISTE REGISTRO PARA ID ', id);
+    	                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @message;
+		END IF;
+        SELECT * FROM cowvaccine c WHERE c.id = id;
+        COMMIT;
+    END;    
 END;;
 DELIMITER ;
 
@@ -359,7 +428,11 @@ BEGIN
     END;
 END;;
 DELIMITER ;
+
 --CLINICHISTORY
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 DROP PROCEDURE IF EXISTS GET_CLINICHISTORYS; --OBTIENE TODOS LOS REGISTROS DE CLINICHISTORY
 DELIMITER ;;
 CREATE PROCEDURE GET_CLINICHISTORYS()
@@ -370,12 +443,25 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS GET_CLINICHISTORY; -- OBTIENE UN REGISTRO ESPECIFICO DE CLINICHISTORY
 DELIMITER ;;
-CREATE PROCEDURE GET_CLINICHISTORYS( IN id INT)
+CREATE PROCEDURE GET_CLINICHISTORY( IN id INT)
 BEGIN
-    SELECT * FROM clinichistory c WHERE c.id = id;
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN
+            GET DIAGNOSTICS CONDITION 1 @p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+            SELECT @p2 AS MESSAGE;
+            ROLLBACK;
+        END;
+    START TRANSACTION;
+    BEGIN
+        IF NOT CLINICHISTORY_EXISTS_ID(id) THEN -- COMPROBACION DE QUE LA VACA EXISTE
+		    SET @message = CONCAT('NO EXISTE REGISTRO PARA ID ', id);
+    	                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @message;
+		END IF;
+        SELECT * FROM clinichistory c WHERE c.id = id;
+        COMMIT;
+    END;
 END;;
 DELIMITER ;
-
 DROP PROCEDURE IF EXISTS CREATE_CLINICHISTORY; -- CREA UN REGISTRO EN CLINICHISTORY
 DELIMITER ;;
 CREATE PROCEDURE CREATE_CLINICHISTORY(IN id_cow INT, IN id_cowvaccine INT, IN description TEXT, IN periodic_weight DOUBLE, IN periodic_height DOUBLE, IN date DATE, IN img_url TEXT)
@@ -388,6 +474,9 @@ BEGIN
 	END;
     START TRANSACTION;
     BEGIN
+        IF (NOT COW_ISALIVE(id_cow)) THEN -- VALIDACIÓN DE QUE LA VACA ESTE VIVA
+		    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'LA VACA ESTA MUERTA ';
+        END IF;
         IF (NOT COW_EXISTS(id_cow)) THEN -- VALIDACIÓN DE QUE EXISTA LA VACA
 		    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'LA VACA NO EXISTE ';
         END IF;     
