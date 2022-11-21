@@ -38,7 +38,7 @@ CREATE TRIGGER VALIDATE_ML_INSERT
 BEFORE INSERT
 ON cowvaccine FOR EACH ROW
 BEGIN 
-	UPDATE inventory i SET i.ml = (i.ml-(NEW.ml - OLD.ml))
+	UPDATE inventory i SET i.ml = (i.ml - NEW.ml)
 	WHERE i.id_vaccine = id_vaccine;
 END;;
 DELIMITER ;

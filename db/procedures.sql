@@ -139,7 +139,7 @@ CREATE FUNCTION VALIDATE_ML(id_vaccine INT, ml_cowvaccine DOUBLE) RETURNS BOOLEA
 BEGIN
     DECLARE ml_inventory DOUBLE;
     SELECT i.ml FROM inventory i WHERE i.id_vaccine = id_vaccine INTO ml_inventory;
-    IF ml_cowvaccine > ml_inventory THEN
+    IF ml_cowvaccine > ml_inventory OR ml_cowvaccine <= 0 THEN
 		RETURN FALSE;
     END IF;
 	RETURN TRUE;
@@ -925,7 +925,7 @@ BEGIN
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'LA VA ESTA MUERTA ';
         END IF;
         IF (NOT VALIDATE_ML(id_vaccine, ml)) THEN -- VALIDACIÓN DE LA CONTIDAD A APLICAR
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO HAY CANTIDAD SUFICIENTE DE VACUNA EN EL INVENTARIO ';
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANTIDAD DE ML INVALIDO, POR FAVOR REVISAR EL DATO INGRESADO ';
         END IF;    
         INSERT INTO cowvaccine VALUES(null, id_cow, id_vaccine, vaccine_date, ml);
         COMMIT;
@@ -958,7 +958,7 @@ BEGIN
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'LA VACA ESTA MUERTA ';
         END IF;
         IF (NOT VALIDATE_ML(id_vaccine, ml)) THEN -- VALIDACIÓN DE LA CONTIDAD A APLICAR
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'NO HAY CANTIDAD SUFICIENTE DE VACUNA EN EL INVENTARIO ';
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CANTIDAD DE ML INVALIDO, POR FAVOR REVISAR EL DATO INGRESADO ';
         END IF;    
         UPDATE cowvaccine c SET c.id_cow = id_cow, c.id_vaccine = id_vaccine, c.vaccine_date = vaccine_date, c.ml = ml WHERE c.id = id;
         COMMIT;
