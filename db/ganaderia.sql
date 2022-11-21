@@ -97,7 +97,7 @@ CREATE TABLE operation(
     id_operation INT NOT NULL AUTO_INCREMENT,
     id_cow INT NOT NULL,
     id_third INT NOT NULL,
-    operation VARCHAR(12) DEFAULT 'PURCHASE',
+    operation VARCHAR(12) NOT NULL DEFAULT 'PURCHASE',
     CHECK(
         operation = 'PURCHASE'
         OR operation = 'SALE'
