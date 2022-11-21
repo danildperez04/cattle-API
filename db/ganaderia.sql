@@ -35,15 +35,15 @@ CREATE TABLE cow(
 );
 CREATE TABLE breedcow(
     id INT AUTO_INCREMENT,
-    id_breed INT,
-    id_cow INT,
+    id_breed INT NOT NULL,
+    id_cow INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_breed) REFERENCES breed(id_breed),
     FOREIGN KEY (id_cow) REFERENCES cow(id_cow)
 );
 CREATE TABLE deadcow(
     id_death INT NOT NULL AUTO_INCREMENT,
-    id_cow INT UNIQUE,
+    id_cow INT UNIQUE NOT NULL,
     death_cause TEXT,
     death_date DATE NOT NULL,
     PRIMARY KEY (id_death),
