@@ -107,7 +107,7 @@ DELIMITER ;
 
 -- INVENTORY ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-DROP FUNCTION IF EXISTS INVENTORY_EXISTS_VACCINE; --VALIDA EL ID DE LA VACUNA EN EL INVANTRIO
+DROP FUNCTION IF EXISTS INVENTORY_EXISTS_VACCINE; -- VALIDA EL ID DE LA VACUNA EN EL INVANTRIO
 DELIMITER $$
 CREATE FUNCTION INVENTORY_EXISTS_VACCINE(id_vaccine INT) RETURNS BOOLEAN DETERMINISTIC
 BEGIN
@@ -772,7 +772,7 @@ DELIMITER ;
 
 -- INVENTORY ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-DROP PROCEDURE IF EXISTS GET_INVENTORYS; --OBTIENE TIDOS LOS REGISTROS DEL INVENTARIO
+DROP PROCEDURE IF EXISTS GET_INVENTORYS; -- OBTIENE TIDOS LOS REGISTROS DEL INVENTARIO
 DELIMITER ;;
 CREATE PROCEDURE GET_INVENTORYS()
 BEGIN
@@ -990,7 +990,7 @@ DELIMITER ;
 
 -- CLINICHISTORY --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-DROP PROCEDURE IF EXISTS GET_CLINICHISTORYS; --OBTIENE TODOS LOS REGISTROS DE CLINICHISTORY
+DROP PROCEDURE IF EXISTS GET_CLINICHISTORYS; -- OBTIENE TODOS LOS REGISTROS DE CLINICHISTORY
 DELIMITER ;;
 CREATE PROCEDURE GET_CLINICHISTORYS()
 BEGIN
