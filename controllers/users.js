@@ -1,5 +1,5 @@
 const getUsers = (req, res) => {
-    res.send('All users');
+    res.json({users : 'All users'});
   };
   
   const createUser = (req, res) => {

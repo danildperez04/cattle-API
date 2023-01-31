@@ -1,16 +1,37 @@
-const pool = require('../db.js');
+const pool = require("../db.js");
 
 const getCows = async (req, res) => {
-  const [rows] = await pool.query('SELECT 1 + 1 AS RESULT');
-  res.json({ rows });
+  try {
+    const [results] = await pool.query('CALL GET_COWS()');
+    res.json({ results });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-const createCow = (req, res) => {
-  res.send('Cow Created Succesfully');
+const createCow = async (req, res) => {
+  const cow = req.body;
+
+  try {
+    const [results] = await pool.query(
+      `CALL CREATE_COW({}{}{}{}{}{}{}{})`
+    );
+
+    res.status(201).send({ message: "Usuario creado exitosamente" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Error al crear usuario" });
+  }
 };
 
-const getSingleCow = (req, res) => {
-  res.send(`Obtained Cow: ${req.params.id}`);
+const getSingleCow = async (req, res) => {
+  try{
+    const  [results]  = await pool.query(`CALL GET_COW(${req.params.id})`);
+    res.json({ results });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+  
 };
 
 const updateCow = (req, res) => {
