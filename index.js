@@ -1,33 +1,13 @@
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
 require('dotenv').config({});
-const { host, port } = require('./config');
-const morgan = require('morgan');
-const router = require('./routes');
-const notFound = require('./middlewares/notFound');
-const errorLogger = require('./middlewares/errorLogger');
+const http = require('http');
+const app = require('./app');
+const config = require('./config');
+const PORT = config('port');
+const HOST = config('host')
 
-const app = express();
+const server = http.createServer(app);
 
-//Cross-origin resource sharing
-app.use(cors());
 
-//Statics
-app.use(express.static(path.join(__dirname, 'client/dist')));
-
-//Middlewares
-app.use(express.json());
-app.use(morgan('dev'));
-
-//Routing
-app.use('/api/v1', router);
-
-app.use(notFound);
-
-//Errors
-app.use(errorLogger);
-
-app.listen(port, host, () => {
-  console.log(`Server running on ${port}`);
-});
+server.listen(PORT, HOST, ()=>{
+  console.log(`Server running on port ${PORT}`)
+})

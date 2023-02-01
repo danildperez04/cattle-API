@@ -1,4 +1,9 @@
-module.exports = {
+module.exports = (key) => {
+  if(!configObj.hasOwnProperty(key)) throw new Error(`${key} is not a valid config key`);
+  return configObj[key];
+}
+
+configObj = {
   db: {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
