@@ -3,7 +3,7 @@ const pool = require("../db.js");
 const getCows = async (req, res) => {
   try {
     const [results] = await pool.query('CALL GET_COWS()');
-    res.json({ results });
+    res.json(results[0] );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
